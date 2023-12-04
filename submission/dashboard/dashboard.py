@@ -22,13 +22,14 @@ def buat_tahun_pembagian_sepeda_df(df):
     }, inplace=True)
     return tahun
 
+
 def sidebar(df):
      df["dteday"] = pd.to_datetime(df["dteday"])
      min_date = df["dteday"].min()
      max_date = df["dteday"].max()
 
      with st.sidebar:
-         st.image("https://github.com/adibfloat/Dicoding-BADDP-Proyek-Analisis-Data/assets/58215987/1087aed9-9b17-4213-b1c4-2b4542f10367")
+         
 
          def on_change():
              st.session_state.date = tanggal
@@ -40,6 +41,8 @@ def sidebar(df):
              value=[min_date, max_date],
              on_change=on_change
          )
+
+         st.image("https://github.com/adibfloat/Dicoding-BADDP-Proyek-Analisis-Data/assets/58215987/1087aed9-9b17-4213-b1c4-2b4542f10367")
 
      return tanggal
 
