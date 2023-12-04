@@ -29,7 +29,6 @@ def sidebar(df):
      max_date = df["dteday"].max()
 
      with st.sidebar:
-         
 
          def on_change():
              st.session_state.date = tanggal
@@ -62,10 +61,11 @@ def musim(df):
         ax=ax
     )
     ax.set_title(None)
-    ax.set_ylabel(None)
+    
     ax.set_xlabel(None)
-    ax.tick_params(axis="y", labelsize=20)
+    ax.set_ylabel(None)
     ax.tick_params(axis="x", labelsize=15)
+    ax.tick_params(axis="y", labelsize=20)
     st.pyplot(fig)
 
 # Hubungan antara Jumlah Penyewa berdasarkan tahun
@@ -83,10 +83,10 @@ def tahun(df):
         ax=ax
     )
     ax.set_title(None)
-    ax.set_ylabel(None)
     ax.set_xlabel(None)
-    ax.tick_params(axis="y", labelsize=20)
+    ax.set_ylabel(None)
     ax.tick_params(axis="x", labelsize=15)
+    ax.tick_params(axis="y", labelsize=20)
     st.pyplot(fig)
 
 # Hubungan antara Jumlah Penyewa berdasarkan bulan
@@ -104,41 +104,43 @@ def bulan(df):
         ax=ax
     )
     ax.set_title(None)
-    ax.set_ylabel(None)
     ax.set_xlabel(None)
+    ax.set_ylabel(None)
     ax.tick_params(axis="x", labelsize=15)
     st.pyplot(fig)
 
 if __name__ == "__main__":
-    sns.set(style="dark")
+    sns.set(style="white")
 
     st.header("Bike Sharing Dashboard")
 
-    day_df = pd.read_csv(
+    hari = pd.read_csv(
          "https://raw.githubusercontent.com/adibfloat/Dicoding-BADDP-Proyek-Analisis-Data/main/submission/dashboard/main_data.csv")
 
-    date = sidebar(day_df)
-    if (len(date) == 2):
-        main_df = day_df[(day_df["dteday"] >= str(date[0])) &
-                          (day_df["dteday"] <= str(date[1]))]
+    tanggal = sidebar(hari)
+    if (len(tanggal) == 2):
+        main = hari[(hari["dteday"] >= str(tanggal[0])) &
+                    (hari["dteday"] <= str(tanggal[1]))]
     else:
-        main_df = day_df[(day_df["dteday"] >= str(st.session_state.date[0])) & (
-             day_df["dteday"] <= str(st.session_state.date[1]))]
+        main = hari[(hari["dteday"] >= str(st.session_state.tanggal[0])) & (
+                    hari["dteday"] <= str(st.session_state.tanggal[1]))]
 
     col1, col2 = st.columns(2)
 
     with col1:
-        total_penyewa = main_df['cnt'].sum()
-        st.metric(label="Total Rental Dari Semua Pengguna", value=total_penyewa)
-
-    with col2:
-        total_record = main_df['instant'].count()
+        total_record = main['instant'].count()
         st.metric(label="Total Record", value=total_record)
 
-season_df = buat_musim_pembagian_sepeda_df(main_df)
+    with col2:
+        total_penyewa = main['cnt'].sum()
+        st.metric(label="Total Rental Dari Semua Pengguna", value=total_penyewa)
+
+        
+
+season_df = buat_musim_pembagian_sepeda_df(main)
 musim(season_df)
-year_df = buat_tahun_pembagian_sepeda_df(main_df)
-tahun(year_df)
-bulan(main_df)
+tahunnya = buat_tahun_pembagian_sepeda_df(main)
+tahun(tahunnya)
+bulan(main)
 
 st.caption("© 2023" + " By Adib Niatno")
